@@ -1,0 +1,4124 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7f3" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn-icons-png.flaticon.com/512/6839/6839456.png"
+    />
+
+    <title>Grundlagen Personalmanagement</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f4f3ec;
+        --ink: #192522;
+        --muted: #68736c;
+        --green: #246c50;
+        --line: #dedfd4;
+        --white: #fffefa;
+        font-family: "DM Sans", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--paper);
+        color: var(--ink);
+      }
+      button {
+        font: inherit;
+      }
+      .topbar {
+        height: 64px;
+        padding: 0 clamp(16px, 4vw, 58px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font:
+          700 18px "Space Grotesk",
+          sans-serif;
+      }
+      .brand-mark {
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--green);
+        color: white;
+      }
+      .brand-mark svg {
+        width: 18px;
+        height: 18px;
+      }
+      .top-meta {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+      }
+      .top-count {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink);
+        letter-spacing: 0;
+      }
+      .count-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #f1876c;
+      }
+      main {
+        width: min(1680px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 25px 0 38px;
+      }
+      .intro {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 22px;
+        margin-bottom: 16px;
+      }
+      .eyebrow {
+        margin: 0 0 7px;
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.3px;
+      }
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+      h1 {
+        margin-bottom: 5px;
+        font:
+          700 clamp(27px, 3vw, 38px)/1.1 "Space Grotesk",
+          sans-serif;
+      }
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+      }
+      .progress {
+        width: 230px;
+        flex: 0 0 auto;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .progress-track {
+        height: 7px;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #e1e2d9;
+      }
+      .progress-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--green);
+        transition: width 300ms ease;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 14px;
+        align-items: stretch;
+      }
+      .map-frame {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid #cbd7be;
+        border-radius: 8px;
+        background: #dce9cb;
+        box-shadow: 0 8px 24px #304d2910;
+      }
+      .map-frame {
+        align-self: start;
+      }
+      #world-map {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1.5;
+        cursor: crosshair;
+      }
+      .map-caption,
+      .map-controls {
+        position: absolute;
+        z-index: 1;
+        border: 1px solid #e5e7df;
+        border-radius: 5px;
+        background: #fffefaed;
+        box-shadow: 0 3px 12px #23332712;
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+      .map-caption {
+        top: 13px;
+        left: 13px;
+        padding: 8px 10px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+      }
+      .map-caption span {
+        color: var(--green);
+      }
+      .map-controls {
+        bottom: 12px;
+        left: 12px;
+        padding: 8px 10px;
+        color: #55645a;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      kbd {
+        padding: 2px 5px;
+        border: 1px solid #d6d8ce;
+        border-radius: 3px;
+        background: white;
+        color: var(--ink);
+        font:
+          700 10px "DM Sans",
+          sans-serif;
+      }
+      .map-action {
+        position: absolute;
+        z-index: 2;
+        right: 12px;
+        bottom: 12px;
+        display: none;
+        min-height: 44px;
+        align-items: center;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 5px;
+        background: var(--green);
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 800;
+      }
+      .map-action.show {
+        display: inline-flex;
+      }
+      .map-action:hover {
+        background: #195b41;
+      }
+      .map-action:focus-visible,
+      .station-link:focus-visible {
+        outline: 3px solid #9ac879;
+        outline-offset: 2px;
+      }
+
+      .side {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 0;
+      }
+      .detail,
+      .fieldbook {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--white);
+      }
+      .detail {
+        flex: 1;
+        min-height: 295px;
+        padding: 19px;
+      }
+      .topic-figure {
+        position: relative;
+        overflow: hidden;
+        margin: 0 0 15px;
+        border: 1px solid #dce0d5;
+        border-radius: 6px;
+        background: #e9ecdf;
+      }
+      .topic-art {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1.8;
+        object-fit: cover;
+        animation: scene-arrive 380ms ease both;
+      }
+      .topic-caption {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        left: 8px;
+        padding: 7px 9px;
+        border: 1px solid #ffffff70;
+        border-radius: 4px;
+        background: #172922cf;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .guide {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 13px 0;
+        padding: 9px;
+        border: 1px solid #e7e4d7;
+        border-radius: 5px;
+        background: #faf9f2;
+      }
+      .guide-avatar {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        flex: 0 0 34px;
+        place-items: center;
+        border-radius: 50%;
+        background: #f2d4be;
+        color: #543d31;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .guide-meta {
+        min-width: 0;
+        flex: 1;
+      }
+      .guide-name {
+        display: block;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .guide-role {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .guide-button {
+        flex: 0 0 auto;
+        padding: 7px 8px;
+        border: 1px solid #d4ddd0;
+        border-radius: 4px;
+        background: white;
+        color: var(--green);
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .guide-button:hover {
+        background: #eef5ec;
+      }
+      .guide-quote {
+        display: none;
+        margin: -6px 0 12px 43px;
+        padding: 9px 10px;
+        border-left: 2px solid #e1b676;
+        background: #fbf4e8;
+        color: #5b5243;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .guide-quote.show {
+        display: block;
+        animation: scene-arrive 220ms ease both;
+      }
+      .insight-label {
+        margin: 13px 0 6px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .insight-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .insight-tab {
+        min-height: 36px;
+        padding: 5px 4px;
+        border: 1px solid #e6e4db;
+        border-radius: 4px;
+        background: white;
+        color: #68736c;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .insight-tab[aria-selected="true"] {
+        border-color: #a8c9ab;
+        background: #edf5e9;
+        color: #246c50;
+      }
+      .insight-copy {
+        min-height: 42px;
+        margin: 7px 0 0;
+        padding: 8px 9px;
+        border-radius: 4px;
+        background: #f5f4ed;
+        color: #4f5d54;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      @keyframes scene-arrive {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .detail-icon {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 11px;
+        border-radius: 10px;
+        background: #f4edcf;
+        font-size: 21px;
+      }
+      .detail-tag {
+        margin-bottom: 5px;
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .detail h2 {
+        margin-bottom: 8px;
+        font:
+          700 24px/1.2 "Space Grotesk",
+          sans-serif;
+      }
+      .detail-copy {
+        margin-bottom: 11px;
+        color: #59655e;
+        font-size: 15px;
+        line-height: 1.55;
+      }
+      .fact-list {
+        display: grid;
+        gap: 7px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .fact-list li {
+        position: relative;
+        padding-left: 14px;
+        color: #3d4b43;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .fact-list li::before {
+        position: absolute;
+        left: 0;
+        color: #57956b;
+        content: "•";
+        font-weight: 900;
+      }
+      .detail-tip {
+        margin-top: 12px;
+        padding: 10px 11px;
+        border-left: 2px solid #f1876c;
+        border-radius: 0 4px 4px 0;
+        background: #fff4ed;
+        color: #725246;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .completion {
+        display: none;
+        margin-top: 11px;
+        padding: 10px 11px;
+        border-radius: 5px;
+        background: #e6f2df;
+        color: #295b3f;
+        font-size: 14px;
+        line-height: 1.5;
+        font-weight: 700;
+      }
+      .completion.show {
+        display: block;
+      }
+      .fieldbook {
+        padding: 15px;
+      }
+      .fieldbook-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 9px;
+      }
+      .fieldbook-head h2 {
+        margin: 0;
+        font:
+          700 18px "Space Grotesk",
+          sans-serif;
+      }
+      .fieldbook-head span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .station-list {
+        display: grid;
+        gap: 3px;
+      }
+      .station-link {
+        width: 100%;
+        min-height: 42px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 7px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--ink);
+        text-align: left;
+        cursor: pointer;
+      }
+      .station-link:hover,
+      .station-link.current {
+        background: #f0f5ec;
+      }
+      .station-glyph {
+        width: 22px;
+        text-align: center;
+        font-size: 18px;
+      }
+      .station-name {
+        flex: 1;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .station-state {
+        width: 17px;
+        color: #79917e;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .station-link.visited .station-state {
+        color: var(--green);
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .side {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(250px, 0.7fr);
+          align-items: start;
+        }
+        .detail {
+          padding: 15px;
+        }
+        .fieldbook {
+          padding: 12px;
+        }
+      }
+      @media (max-width: 720px) {
+        main {
+          width: calc(100% - 20px);
+          padding-top: 20px;
+        }
+        .intro {
+          display: block;
+        }
+        .progress {
+          width: 100%;
+          margin-top: 14px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        #world-map {
+          aspect-ratio: 1.5;
+        }
+        .side {
+          display: flex;
+        }
+        .detail {
+          order: 0;
+        }
+        .fieldbook {
+          order: 1;
+        }
+        .station-list {
+          grid-template-columns: 1fr 1fr;
+          column-gap: 8px;
+        }
+      }
+      @media (max-width: 440px) {
+        main {
+          width: calc(100% - 12px);
+        }
+        .topbar {
+          height: 58px;
+          padding: 0 12px;
+        }
+        .top-meta {
+          gap: 8px;
+          font-size: 10px;
+        }
+        .map-caption {
+          top: 7px;
+          left: 7px;
+          padding: 6px 7px;
+          font-size: 11px;
+        }
+        .map-controls {
+          bottom: 7px;
+          left: 7px;
+          padding: 6px 7px;
+          font-size: 9px;
+        }
+        .map-action {
+          right: 7px;
+          bottom: 42px;
+        }
+        .station-list {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        height: 100dvh;
+        min-height: 0;
+      }
+      .topbar,
+      .intro {
+        display: none !important;
+      }
+      main {
+        position: relative;
+        isolation: isolate;
+        width: 100%;
+        height: 100dvh;
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .layout {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+        grid-template-rows: minmax(0, 1fr);
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+      .map-frame {
+        position: relative;
+        inset: auto;
+        display: grid;
+        grid-column: 1;
+        grid-row: 1;
+        place-items: center;
+        align-self: stretch;
+        width: auto;
+        height: auto;
+        min-width: 0;
+        border: 0;
+        border-radius: 0;
+        aspect-ratio: auto;
+        box-shadow: none;
+      }
+      #world-map {
+        position: relative;
+        inset: auto;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: 3 / 2;
+      }
+      .map-caption {
+        top: 14px;
+        left: 14px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+      .map-caption #map-count {
+        padding-left: 10px;
+        border-left: 1px solid #d5d8cf;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .map-controls {
+        bottom: 16px;
+        left: 16px;
+        z-index: 3;
+        font-size: 12px;
+      }
+      .side {
+        position: relative;
+        z-index: 4;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        display: grid;
+        grid-column: 2;
+        grid-row: 1;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) auto;
+        align-items: stretch;
+        gap: 8px;
+        width: auto;
+        height: 100%;
+        max-height: calc(100dvh - 28px);
+        padding: 14px 12px 14px 0;
+      }
+      .detail {
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+        padding: 13px;
+      }
+      .detail-icon {
+        display: none;
+      }
+      .detail-tag {
+        margin-bottom: 5px;
+        font-size: 10px;
+      }
+      .topic-figure {
+        margin-bottom: 8px;
+      }
+      .topic-art {
+        height: 116px;
+        aspect-ratio: auto;
+        object-fit: cover;
+      }
+      .detail h2 {
+        margin-bottom: 6px;
+        font-size: 22px;
+      }
+      .detail-copy {
+        margin-bottom: 7px;
+        font-size: 14px;
+        line-height: 1.35;
+      }
+      .guide {
+        gap: 7px;
+        margin: 7px 0;
+        padding: 6px;
+      }
+      .guide-avatar {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+      }
+      .guide-name {
+        font-size: 12px;
+      }
+      .guide-role {
+        font-size: 11px;
+      }
+      .guide-button {
+        padding: 6px 7px;
+        font-size: 11px;
+      }
+      .guide-quote {
+        margin: 0 0 7px 36px;
+        padding: 6px;
+        font-size: 12px;
+      }
+      .insight-label {
+        margin: 7px 0 4px;
+        font-size: 10px;
+      }
+      .insight-tabs {
+        gap: 3px;
+      }
+      .insight-tab {
+        min-height: 30px;
+        padding: 4px 2px;
+        font-size: 11px;
+      }
+      .insight-copy {
+        min-height: 0;
+        margin-top: 5px;
+        padding: 7px;
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .fact-list,
+      .detail-tip {
+        display: none;
+      }
+      .fact-list {
+        display: grid;
+        gap: 3px;
+        margin-top: 5px;
+      }
+      .fact-list li {
+        font-size: 13px;
+        line-height: 1.3;
+      }
+      .detail-tip {
+        display: block;
+        margin-top: 6px;
+        padding: 7px 8px;
+        font-size: 12px;
+        line-height: 1.3;
+      }
+      .detail-tip.show {
+        display: block;
+        position: static;
+        margin: 6px 0 0;
+        padding: 7px 8px;
+        box-shadow: none;
+      }
+      .completion {
+        margin-top: 7px;
+        padding: 7px;
+        font-size: 12px;
+      }
+      .fieldbook {
+        min-height: 0;
+        padding: 9px;
+      }
+      .fieldbook-head {
+        margin-bottom: 5px;
+      }
+      .fieldbook-head h2 {
+        font-size: 16px;
+      }
+      .fieldbook-head span {
+        font-size: 11px;
+      }
+      .station-list {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 3px;
+      }
+      .station-link {
+        min-width: 0;
+        min-height: 36px;
+        justify-content: center;
+        gap: 2px;
+        padding: 3px;
+      }
+      .station-link:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+      }
+      .station-glyph {
+        width: auto;
+        font-size: 17px;
+      }
+      .station-name {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+      .station-state {
+        width: auto;
+        font-size: 10px;
+      }
+      .map-action {
+        right: auto;
+        bottom: 16px;
+        left: 50%;
+        z-index: 5;
+        min-height: 42px;
+        transform: translateX(-50%);
+        font-size: 13px;
+      }
+
+      @media (max-width: 720px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+        }
+        .map-frame {
+          grid-column: 1;
+          grid-row: 1;
+          min-height: 0;
+        }
+        #world-map {
+          width: 100%;
+          height: auto;
+          max-width: 100%;
+          max-height: 100%;
+        }
+        .map-caption {
+          top: 8px;
+          left: 8px;
+          gap: 6px;
+          padding: 7px 8px;
+          font-size: 10px;
+        }
+        .map-caption #map-count {
+          padding-left: 6px;
+        }
+        .map-controls {
+          display: none;
+        }
+        .side {
+          position: relative;
+          top: auto;
+          right: auto;
+          bottom: auto;
+          left: auto;
+          grid-column: 1;
+          grid-row: 2;
+          width: auto;
+          height: 100%;
+          max-height: none;
+          grid-template-rows: minmax(0, 1fr) auto;
+          align-items: stretch;
+          padding: 4px 8px 8px;
+        }
+        .detail {
+          height: auto;
+          padding: 8px;
+        }
+        .detail-tag,
+        .insight-label {
+          display: none;
+        }
+        .topic-figure {
+          margin-bottom: 5px;
+        }
+        .topic-art {
+          height: 52px;
+        }
+        .topic-caption {
+          right: 5px;
+          bottom: 5px;
+          left: 5px;
+          padding: 4px 6px;
+          font-size: 10px;
+        }
+        .detail h2 {
+          margin-bottom: 3px;
+          font-size: 19px;
+        }
+        .detail-copy {
+          display: -webkit-box;
+          margin-bottom: 3px;
+          overflow: hidden;
+          line-clamp: 1;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          font-size: 12px;
+          line-height: 1.2;
+        }
+        .fact-list {
+          gap: 1px;
+          margin-top: 2px;
+        }
+        .fact-list li {
+          font-size: 11px;
+          line-height: 1.05;
+        }
+        .detail-tip,
+        .detail-tip.show {
+          position: static;
+          margin: 2px 0 0;
+          padding: 3px 4px;
+          font-size: 9px;
+          line-height: 1.1;
+          box-shadow: none;
+        }
+        .completion.show {
+          display: none;
+        }
+        .completion {
+          margin: 3px 0 0;
+          padding: 4px;
+          font-size: 10px;
+          line-height: 1.2;
+        }
+        .guide {
+          gap: 4px;
+          margin: 2px 0;
+          padding: 2px;
+        }
+        .guide-avatar {
+          width: 22px;
+          height: 22px;
+          flex-basis: 22px;
+          font-size: 10px;
+        }
+        .guide-name {
+          font-size: 11px;
+        }
+        .guide-role {
+          display: none;
+        }
+        .guide-button {
+          padding: 4px 5px;
+          font-size: 10px;
+        }
+        .guide-quote {
+          max-height: 48px;
+          overflow: auto;
+          margin: 0 0 4px 30px;
+          padding: 4px;
+          font-size: 10px;
+        }
+        .insight-tabs {
+          gap: 2px;
+        }
+        .insight-tab {
+          min-height: 26px;
+          padding: 2px;
+          font-size: 9px;
+        }
+        .insight-copy {
+          max-height: 42px;
+          overflow: hidden;
+          margin-top: 3px;
+          padding: 4px;
+          font-size: 11px;
+          line-height: 1.25;
+        }
+        .fieldbook {
+          padding: 6px;
+        }
+        .fieldbook-head {
+          margin-bottom: 3px;
+        }
+        .fieldbook-head h2 {
+          font-size: 13px;
+        }
+        .fieldbook-head span {
+          font-size: 10px;
+        }
+        .station-list {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 2px;
+        }
+        .station-link {
+          display: grid;
+          grid-template-rows: 17px auto;
+          min-height: 38px;
+          gap: 0;
+          padding: 1px;
+        }
+        .station-name {
+          position: static;
+          display: -webkit-box;
+          width: auto;
+          height: auto;
+          overflow: hidden;
+          clip: auto;
+          white-space: normal;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          font-size: 9px;
+          line-height: 1.05;
+          text-align: center;
+          text-overflow: ellipsis;
+        }
+        .station-glyph {
+          font-size: 14px;
+        }
+        .station-state {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+        .map-action {
+          bottom: 10px;
+          min-height: 38px;
+        }
+      }
+      @media (max-width: 380px) {
+        .side {
+          max-height: none;
+        }
+        .topic-art {
+          height: 64px;
+        }
+      }
+
+      :root {
+        color-scheme: light;
+        --paper: #f5f7f3;
+        --ink: #17251f;
+        --muted: #68766e;
+        --green: #277354;
+        --line: #e2e8e1;
+        --white: #ffffff;
+        font-family:
+          "DM Sans",
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background:
+          radial-gradient(ellipse at 8% 0%, #eaf2e6 0, transparent 34rem),
+          var(--paper);
+      }
+
+      button {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .topbar,
+      .intro {
+        display: flex !important;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        height: 68px;
+        padding-inline: max(24px, calc((100vw - 1480px) / 2));
+        border-bottom: 1px solid #e4e9e1;
+        background: #ffffffeb;
+        backdrop-filter: blur(16px);
+      }
+
+      .brand {
+        gap: 11px;
+        font:
+          700 19px "Space Grotesk",
+          "DM Sans",
+          sans-serif;
+        letter-spacing: -0.6px;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+        box-shadow: 0 4px 10px #246c502b;
+      }
+
+      .top-meta {
+        gap: 20px;
+        font-size: 11px;
+        letter-spacing: 1px;
+      }
+
+      .count-dot {
+        width: 9px;
+        height: 9px;
+        box-shadow: 0 0 0 4px #f1876c20;
+      }
+
+      main {
+        position: static;
+        isolation: auto;
+        width: min(1480px, calc(100% - 48px));
+        height: auto;
+        min-height: 0;
+        margin: 0 auto;
+        padding: 36px 0 56px;
+        overflow: visible;
+      }
+
+      .intro {
+        align-items: center;
+        gap: 28px;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        margin-bottom: 9px;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: clamp(30px, 3.4vw, 44px);
+        letter-spacing: -1.7px;
+      }
+
+      .subtitle {
+        max-width: 620px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .progress {
+        width: min(290px, 34%);
+        padding: 15px 17px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #ffffffc9;
+        box-shadow: 0 6px 20px #243a2c08;
+      }
+
+      .progress-label {
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 12px;
+      }
+
+      .progress-track {
+        height: 8px;
+        background: #e9eee8;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, #358763, #82b77a);
+      }
+
+      .layout {
+        position: static;
+        display: grid;
+        grid-template-columns: minmax(0, 1.65fr) minmax(330px, 0.78fr);
+        grid-template-rows: auto;
+        align-items: start;
+        gap: 20px;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+      }
+
+      .map-frame {
+        position: relative;
+        display: grid;
+        grid-column: 1;
+        grid-row: 1;
+        place-items: center;
+        align-self: start;
+        width: 100%;
+        height: auto;
+        min-width: 0;
+        overflow: hidden;
+        aspect-ratio: 1.5;
+        border: 1px solid #d9e3d5;
+        border-radius: 20px;
+        background: #dce9cb;
+        box-shadow: 0 16px 42px #243a2c12;
+      }
+
+      #world-map {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: 3 / 2;
+        touch-action: manipulation;
+      }
+
+      .map-caption,
+      .map-controls {
+        border-color: #ffffffa6;
+        border-radius: 10px;
+        background: #fffffff0;
+        box-shadow: 0 5px 18px #253c2c14;
+      }
+
+      .map-caption {
+        top: 16px;
+        left: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 13px;
+        font-size: 11px;
+        letter-spacing: 0.7px;
+      }
+
+      .map-caption #map-count {
+        padding-left: 10px;
+        border-left: 1px solid #e2e8e1;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .map-controls {
+        bottom: 16px;
+        left: 16px;
+        padding: 9px 12px;
+        color: #56675c;
+        font-size: 12px;
+      }
+
+      .map-action {
+        right: 16px;
+        bottom: 16px;
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: 11px;
+        background: var(--green);
+        box-shadow: 0 7px 18px #246c5038;
+        transition:
+          background 160ms ease,
+          transform 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .map-action:hover {
+        transform: translateY(-2px);
+        background: #1e6145;
+        box-shadow: 0 10px 22px #246c5040;
+      }
+
+      .side {
+        position: sticky;
+        top: 88px;
+        display: flex;
+        grid-column: 2;
+        grid-row: 1;
+        flex-direction: column;
+        gap: 12px;
+        width: auto;
+        height: auto;
+        max-height: none;
+        min-width: 0;
+        padding: 0;
+      }
+
+      .detail,
+      .fieldbook {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--white);
+        box-shadow: 0 8px 28px #243a2c08;
+      }
+
+      .detail {
+        position: relative;
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow: visible;
+        padding: 18px;
+      }
+
+      .detail-icon {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        margin-bottom: 12px;
+        border-radius: 13px;
+        background: #eff5e8;
+      }
+
+      .detail-tag {
+        margin-bottom: 7px;
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      .topic-figure {
+        margin-bottom: 14px;
+        border-color: #e5ebe3;
+        border-radius: 12px;
+        background: #f0f3eb;
+      }
+
+      .topic-art {
+        height: auto;
+        aspect-ratio: 1.8;
+        object-fit: cover;
+      }
+
+      .topic-caption {
+        right: 9px;
+        bottom: 9px;
+        left: 9px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+      }
+
+      .detail h2 {
+        margin-bottom: 8px;
+        font-size: 23px;
+        letter-spacing: -0.7px;
+      }
+
+      .detail-copy {
+        margin-bottom: 12px;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .guide {
+        gap: 10px;
+        margin: 12px 0;
+        padding: 9px;
+        border-color: #e9ede6;
+        border-radius: 11px;
+        background: #fafbf8;
+      }
+
+      .guide-avatar {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+      }
+
+      .guide-button,
+      .insight-tab {
+        border-radius: 8px;
+        transition:
+          color 150ms ease,
+          background 150ms ease,
+          border-color 150ms ease,
+          transform 150ms ease;
+      }
+
+      .guide-button {
+        padding: 8px 10px;
+      }
+
+      .guide-button:hover,
+      .insight-tab:hover {
+        transform: translateY(-1px);
+      }
+
+      .guide-quote {
+        margin: -4px 0 12px 46px;
+        padding: 10px 12px;
+        border-radius: 0 9px 9px 0;
+      }
+
+      .insight-label {
+        margin: 13px 0 7px;
+      }
+
+      .insight-tabs {
+        gap: 6px;
+      }
+
+      .insight-tab {
+        min-height: 38px;
+        border-radius: 9px;
+      }
+
+      .insight-tab[aria-selected="true"] {
+        border-color: #bdd6be;
+        background: #eef6eb;
+      }
+
+      .insight-copy {
+        min-height: 0;
+        margin-top: 8px;
+        padding: 10px 11px;
+        border-radius: 9px;
+      }
+
+      .fact-list {
+        gap: 8px;
+      }
+
+      .fact-list li {
+        padding-left: 17px;
+        line-height: 1.5;
+      }
+
+      .detail-tip {
+        padding: 11px 12px;
+        border-radius: 0 9px 9px 0;
+      }
+
+      .completion {
+        border-radius: 10px;
+      }
+
+      .fieldbook {
+        flex: 0 0 auto;
+        min-height: 0;
+        padding: 15px;
+      }
+
+      .fieldbook-head {
+        margin-bottom: 9px;
+      }
+
+      .fieldbook-head h2 {
+        font-size: 17px;
+      }
+
+      .station-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+
+      .station-link {
+        min-height: 40px;
+        gap: 9px;
+        padding: 5px 8px;
+        border-radius: 9px;
+        transition:
+          background 150ms ease,
+          transform 150ms ease;
+      }
+
+      .station-link:hover:not(:disabled) {
+        transform: translateX(2px);
+      }
+
+      .station-link.current {
+        background: #f0f6ed;
+      }
+
+      .station-link:disabled {
+        opacity: 0.52;
+        cursor: not-allowed;
+      }
+
+      .station-glyph {
+        width: 24px;
+      }
+
+      .station-name {
+        font-size: 13px;
+      }
+
+      .station-state {
+        width: 20px;
+      }
+
+      .station-link:focus-visible,
+      .map-action:focus-visible,
+      .guide-button:focus-visible,
+      .insight-tab:focus-visible {
+        outline: 3px solid #83b98b;
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 1050px) {
+        main {
+          width: min(900px, calc(100% - 40px));
+        }
+
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .side {
+          position: static;
+          display: grid;
+          grid-column: auto;
+          grid-row: auto;
+          grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+          grid-template-rows: auto;
+          align-items: start;
+          max-height: none;
+        }
+
+        .detail {
+          grid-column: 1;
+          grid-row: 1;
+          overflow: visible;
+        }
+
+        .fieldbook {
+          grid-column: 2;
+          grid-row: 1;
+        }
+
+        .station-list {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .topbar {
+          height: 60px;
+          padding-inline: 18px;
+        }
+
+        .brand {
+          font-size: 17px;
+        }
+
+        .top-meta {
+          gap: 10px;
+          font-size: 9px;
+          letter-spacing: 0.6px;
+        }
+
+        .top-count {
+          gap: 6px;
+        }
+
+        main {
+          width: calc(100% - 28px);
+          padding: 25px 0 36px;
+        }
+
+        .intro {
+          display: flex !important;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 14px;
+          margin-bottom: 17px;
+        }
+
+        h1 {
+          font-size: clamp(29px, 7vw, 38px);
+        }
+
+        .subtitle {
+          font-size: 14px;
+        }
+
+        .progress {
+          width: 100%;
+          padding: 12px 14px;
+        }
+
+        .layout {
+          gap: 14px;
+        }
+
+        .map-frame {
+          border-radius: 15px;
+        }
+
+        .map-caption {
+          top: 9px;
+          left: 9px;
+          gap: 6px;
+          padding: 7px 8px;
+          font-size: 9px;
+        }
+
+        .map-caption #map-count {
+          padding-left: 6px;
+        }
+
+        .map-controls {
+          bottom: 9px;
+          left: 9px;
+          padding: 7px 8px;
+          font-size: 10px;
+        }
+
+        .map-action {
+          right: 9px;
+          bottom: 9px;
+          min-height: 38px;
+          padding-inline: 10px;
+          font-size: 11px;
+        }
+
+        .side {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+        }
+
+        .detail {
+          padding: 15px;
+        }
+
+        .detail-icon {
+          display: grid;
+        }
+
+        .detail-tag,
+        .insight-label {
+          display: block;
+        }
+
+        .topic-figure {
+          margin-bottom: 12px;
+        }
+
+        .topic-art {
+          height: auto;
+          aspect-ratio: 1.8;
+        }
+
+        .detail h2 {
+          font-size: 22px;
+        }
+
+        .detail-copy {
+          display: block;
+          overflow: visible;
+          font-size: 14px;
+          line-height: 1.5;
+          -webkit-line-clamp: unset;
+        }
+
+        .fact-list {
+          gap: 7px;
+          margin-top: 8px;
+        }
+
+        .fact-list li {
+          font-size: 13px;
+          line-height: 1.45;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          position: static;
+          margin-top: 10px;
+          padding: 10px;
+          font-size: 13px;
+          line-height: 1.45;
+          box-shadow: none;
+        }
+
+        .completion.show {
+          display: block;
+        }
+
+        .completion {
+          margin-top: 9px;
+          padding: 10px;
+          font-size: 13px;
+          line-height: 1.45;
+        }
+
+        .guide {
+          gap: 8px;
+          margin: 10px 0;
+          padding: 8px;
+        }
+
+        .guide-avatar {
+          width: 32px;
+          height: 32px;
+          flex-basis: 32px;
+        }
+
+        .guide-name {
+          font-size: 12px;
+        }
+
+        .guide-role {
+          display: block;
+          font-size: 11px;
+        }
+
+        .guide-button {
+          padding: 7px 8px;
+          font-size: 11px;
+        }
+
+        .guide-quote {
+          max-height: none;
+          margin: 0 0 10px 40px;
+          padding: 9px;
+          font-size: 12px;
+        }
+
+        .insight-tabs {
+          gap: 5px;
+        }
+
+        .insight-tab {
+          min-height: 36px;
+          padding: 5px;
+          font-size: 11px;
+        }
+
+        .insight-copy {
+          max-height: none;
+          padding: 9px;
+          font-size: 13px;
+          line-height: 1.45;
+        }
+
+        .fieldbook {
+          padding: 13px;
+        }
+
+        .fieldbook-head h2 {
+          font-size: 16px;
+        }
+
+        .station-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 4px;
+        }
+
+        .station-link {
+          display: flex;
+          min-height: 42px;
+          gap: 6px;
+          padding: 5px;
+        }
+
+        .station-name {
+          position: static;
+          display: block;
+          width: auto;
+          height: auto;
+          overflow: hidden;
+          clip: auto;
+          font-size: 11px;
+          line-height: 1.25;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .station-glyph {
+          flex: 0 0 20px;
+          font-size: 16px;
+        }
+
+        .station-state {
+          position: static;
+          flex: 0 0 16px;
+          font-size: 11px;
+        }
+      }
+
+      @media (max-width: 390px) {
+        .topbar {
+          padding-inline: 12px;
+        }
+
+        .top-meta > span:first-child {
+          display: none;
+        }
+
+        main {
+          width: calc(100% - 20px);
+        }
+
+        .map-caption {
+          gap: 4px;
+          font-size: 8px;
+        }
+
+        .map-controls {
+          max-width: 48%;
+          font-size: 9px;
+        }
+
+        .station-list {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      body {
+        height: 100dvh;
+      }
+
+      .topbar,
+      .intro {
+        display: flex !important;
+      }
+
+      .topbar {
+        position: relative;
+        height: 56px;
+        min-height: 56px;
+        padding-inline: clamp(14px, 3vw, 38px);
+      }
+
+      main {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 12px;
+        width: 100%;
+        height: calc(100dvh - 56px);
+        min-height: 0;
+        margin: 0;
+        padding: 12px clamp(14px, 3vw, 38px) 16px;
+        overflow: hidden;
+      }
+
+      .intro {
+        align-items: center;
+        gap: 20px;
+        min-height: 0;
+        margin: 0;
+      }
+
+      .eyebrow {
+        margin-bottom: 4px;
+        font-size: 9px;
+      }
+
+      h1 {
+        margin-bottom: 2px;
+        font-size: clamp(21px, 2.5vw, 30px);
+        letter-spacing: -0.8px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .progress {
+        width: min(260px, 32%);
+        padding: 10px 13px;
+      }
+
+      .progress-label {
+        margin-bottom: 7px;
+        font-size: 11px;
+      }
+
+      .layout {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(290px, 0.8fr);
+        grid-template-rows: minmax(0, 1fr);
+        align-items: stretch;
+        gap: 14px;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .map-frame {
+        position: relative;
+        display: grid;
+        grid-column: 1;
+        grid-row: 1;
+        align-self: stretch;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        aspect-ratio: auto;
+        border: 1px solid #d9e3d5;
+        border-radius: 16px;
+        box-shadow: 0 12px 32px #243a2c10;
+      }
+
+      #world-map {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        aspect-ratio: 3 / 2;
+      }
+
+      .side {
+        position: relative;
+        top: auto;
+        display: grid;
+        grid-column: 2;
+        grid-row: 1;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) auto;
+        align-items: stretch;
+        gap: 8px;
+        width: auto;
+        height: 100%;
+        max-height: 100%;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .detail {
+        min-height: 0;
+        overflow: hidden;
+        padding: 12px;
+      }
+
+      .detail-icon {
+        display: none;
+      }
+
+      .detail-tag {
+        margin-bottom: 4px;
+        font-size: 9px;
+      }
+
+      .topic-figure {
+        margin-bottom: 7px;
+        border-radius: 9px;
+      }
+
+      .topic-art {
+        height: clamp(54px, 10vh, 90px);
+        aspect-ratio: auto;
+      }
+
+      .topic-caption {
+        right: 6px;
+        bottom: 6px;
+        left: 6px;
+        padding: 5px 7px;
+        border-radius: 6px;
+        font-size: 10px;
+      }
+
+      .detail h2 {
+        margin-bottom: 4px;
+        font-size: clamp(17px, 1.8vw, 21px);
+      }
+
+      .detail-copy {
+        display: -webkit-box;
+        margin-bottom: 5px;
+        overflow: hidden;
+        font-size: 12px;
+        line-height: 1.35;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+
+      .guide {
+        gap: 6px;
+        margin: 5px 0;
+        padding: 5px;
+      }
+
+      .guide-avatar {
+        width: 27px;
+        height: 27px;
+        flex-basis: 27px;
+        font-size: 11px;
+      }
+
+      .guide-name {
+        font-size: 11px;
+      }
+
+      .guide-role {
+        font-size: 10px;
+      }
+
+      .guide-button {
+        padding: 5px 7px;
+        font-size: 10px;
+      }
+
+      .guide-quote {
+        max-height: 70px;
+        overflow: auto;
+        margin: 0 0 5px 33px;
+        padding: 5px 7px;
+        font-size: 10px;
+      }
+
+      .insight-label {
+        margin: 5px 0 3px;
+        font-size: 9px;
+      }
+
+      .insight-tabs {
+        gap: 3px;
+      }
+
+      .insight-tab {
+        min-height: 29px;
+        padding: 3px;
+        font-size: 10px;
+      }
+
+      .insight-copy {
+        display: -webkit-box;
+        min-height: 0;
+        max-height: 48px;
+        margin-top: 4px;
+        padding: 6px 7px;
+        overflow: hidden;
+        font-size: 11px;
+        line-height: 1.35;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+
+      .fact-list,
+      .detail-tip,
+      .completion {
+        display: none !important;
+      }
+
+      .fact-list {
+        display: grid !important;
+        gap: 3px;
+        margin: 5px 0 0;
+      }
+
+      .fact-list li {
+        font-size: 11px;
+        line-height: 1.3;
+      }
+
+      .detail-tip {
+        position: static;
+        display: block !important;
+        margin-top: 7px;
+        padding: 8px 9px;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .detail-tip.show {
+        position: static;
+        display: block !important;
+        margin-top: 7px;
+        box-shadow: none;
+      }
+
+      .completion.show {
+        display: block !important;
+        margin-top: 7px;
+        padding: 8px 9px;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .fieldbook {
+        flex: 0 0 auto;
+        min-height: 0;
+        padding: 8px;
+        border-radius: 12px;
+      }
+
+      .fieldbook-head {
+        margin-bottom: 4px;
+      }
+
+      .fieldbook-head h2 {
+        font-size: 14px;
+      }
+
+      .fieldbook-head span {
+        font-size: 10px;
+      }
+
+      .station-list {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 3px;
+      }
+
+      .station-link {
+        min-width: 0;
+        min-height: 32px;
+        justify-content: center;
+        gap: 2px;
+        padding: 3px;
+      }
+
+      .station-glyph {
+        width: auto;
+        font-size: 15px;
+      }
+
+      .station-name {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+
+      .station-state {
+        width: auto;
+        font-size: 10px;
+      }
+
+      @media (max-width: 800px) {
+        .topbar {
+          height: 48px;
+          min-height: 48px;
+        }
+
+        main {
+          grid-template-rows: minmax(0, 1fr);
+          height: calc(100dvh - 48px);
+          padding: 8px 10px 10px;
+        }
+
+        .intro {
+          display: none !important;
+        }
+
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: minmax(0, 30dvh) minmax(0, 1fr);
+          gap: 7px;
+        }
+
+        .map-frame {
+          grid-column: 1;
+          grid-row: 1;
+          border-radius: 12px;
+        }
+
+        #world-map {
+          width: 100%;
+          height: auto;
+          max-width: 100%;
+          max-height: calc(30dvh - 2px);
+        }
+
+        .map-caption {
+          top: 6px;
+          left: 6px;
+          gap: 5px;
+          padding: 5px 7px;
+          border-radius: 7px;
+          font-size: 8px;
+        }
+
+        .map-caption #map-count {
+          padding-left: 5px;
+        }
+
+        .map-controls {
+          display: none;
+        }
+
+        .map-action {
+          right: 7px;
+          bottom: 7px;
+          left: auto;
+          min-height: 32px;
+          padding-inline: 9px;
+          border-radius: 8px;
+          font-size: 10px;
+          transform: none;
+        }
+
+        .side {
+          grid-column: 1;
+          grid-row: 2;
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: minmax(0, 1fr) auto;
+          gap: 6px;
+          height: 100%;
+          max-height: 100%;
+        }
+
+        .detail,
+        .fieldbook {
+          grid-column: auto;
+          grid-row: auto;
+        }
+
+        .detail {
+          padding: 8px 10px;
+          border-radius: 12px;
+        }
+
+        .detail-tag,
+        .insight-label,
+        .topic-figure {
+          display: none;
+        }
+
+        .detail h2 {
+          margin-bottom: 3px;
+          font-size: clamp(16px, 4vw, 19px);
+        }
+
+        .detail-copy {
+          margin-bottom: 3px;
+          font-size: 11px;
+          -webkit-line-clamp: 2;
+        }
+
+        .fact-list {
+          gap: 2px;
+          margin-top: 3px;
+        }
+
+        .fact-list li {
+          font-size: 10px;
+          line-height: 1.2;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          margin-top: 4px;
+          padding: 5px 7px;
+          font-size: 10px;
+          line-height: 1.25;
+        }
+
+        .guide {
+          margin: 3px 0;
+          padding: 3px 5px;
+        }
+
+        .guide-role {
+          display: none;
+        }
+
+        .guide-quote {
+          max-height: 40px;
+          margin-left: 32px;
+        }
+
+        .insight-tabs {
+          gap: 3px;
+        }
+
+        .insight-tab {
+          min-height: 27px;
+          font-size: 10px;
+        }
+
+        .insight-copy {
+          max-height: 34px;
+          margin-top: 3px;
+          padding: 4px 6px;
+          font-size: 10px;
+          line-height: 1.25;
+          -webkit-line-clamp: 2;
+        }
+
+        .completion.show {
+          display: block !important;
+          margin-top: 3px;
+          padding: 4px 6px;
+          font-size: 10px;
+          line-height: 1.2;
+        }
+
+        .fieldbook {
+          padding: 5px 8px;
+          border-radius: 10px;
+        }
+
+        .fieldbook-head {
+          margin-bottom: 2px;
+        }
+
+        .fieldbook-head h2 {
+          font-size: 12px;
+        }
+
+        .station-list {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 2px;
+        }
+
+        .station-link {
+          display: grid;
+          grid-template-rows: 15px 12px;
+          min-height: 29px;
+          gap: 0;
+          padding: 1px 2px;
+        }
+
+        .station-name {
+          position: static;
+          display: block;
+          width: auto;
+          height: auto;
+          overflow: hidden;
+          clip: auto;
+          font-size: 8px;
+          line-height: 1.2;
+          text-align: center;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .station-glyph {
+          width: auto;
+          font-size: 13px;
+        }
+
+        .station-state {
+          position: absolute;
+          top: 1px;
+          right: 2px;
+          font-size: 9px;
+        }
+      }
+
+      @media (max-width: 800px) and (max-height: 650px) {
+        .topbar {
+          height: 42px;
+          min-height: 42px;
+        }
+
+        main {
+          height: calc(100dvh - 42px);
+          padding: 5px 8px 7px;
+        }
+
+        .layout {
+          grid-template-rows: minmax(0, 27dvh) minmax(0, 1fr);
+          gap: 5px;
+        }
+
+        #world-map {
+          max-height: calc(27dvh - 16px);
+        }
+
+        .detail {
+          padding: 5px 8px;
+        }
+
+        .detail-copy {
+          -webkit-line-clamp: 1;
+        }
+
+        .fact-list {
+          margin-top: 2px;
+        }
+
+        .fact-list li {
+          font-size: 9px;
+          line-height: 1.1;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          margin-top: 2px;
+          padding: 3px 5px;
+          font-size: 9px;
+          line-height: 1.15;
+        }
+
+        .guide {
+          margin: 2px 0;
+        }
+
+        .insight-copy {
+          max-height: 26px;
+          padding-block: 3px;
+        }
+
+        .station-link {
+          min-height: 25px;
+        }
+      }
+
+      @media (min-width: 801px) and (max-height: 800px) {
+        #world-map {
+          max-height: calc(100dvh - 180px);
+        }
+
+        .detail {
+          padding: 7px 9px;
+        }
+
+        .topic-figure {
+          display: none;
+        }
+
+        .detail-copy {
+          -webkit-line-clamp: 1;
+        }
+
+        .detail {
+          padding: 8px 10px;
+        }
+
+        .guide {
+          margin-block: 3px;
+          padding: 4px;
+        }
+
+        .insight-label {
+          margin-block: 3px;
+        }
+
+        .insight-tab {
+          min-height: 26px;
+        }
+
+        .insight-copy {
+          max-height: 36px;
+          margin-top: 3px;
+          padding: 4px 6px;
+        }
+
+        .completion.show {
+          display: none !important;
+        }
+      }
+
+      @media (min-width: 801px) {
+        .layout {
+          grid-template-columns: minmax(0, 1.4fr) minmax(380px, 1fr);
+        }
+
+        .detail {
+          padding: 16px;
+        }
+
+        .detail-tag {
+          margin-bottom: 6px;
+          font-size: 10px;
+        }
+
+        .topic-figure {
+          margin-bottom: 10px;
+        }
+
+        .topic-art {
+          height: clamp(78px, 12vh, 112px);
+        }
+
+        .topic-caption {
+          padding: 7px 9px;
+          font-size: 12px;
+        }
+
+        .detail h2 {
+          margin-bottom: 6px;
+          font-size: clamp(21px, 1.9vw, 25px);
+        }
+
+        .detail-copy {
+          margin-bottom: 8px;
+          font-size: 15px;
+          line-height: 1.45;
+        }
+
+        .guide {
+          gap: 8px;
+          margin: 8px 0;
+          padding: 7px;
+        }
+
+        .guide-avatar {
+          width: 34px;
+          height: 34px;
+          flex-basis: 34px;
+          font-size: 13px;
+        }
+
+        .guide-name {
+          font-size: 13px;
+        }
+
+        .guide-role {
+          font-size: 12px;
+        }
+
+        .guide-button {
+          padding: 7px 9px;
+          font-size: 11px;
+        }
+
+        .guide-quote {
+          max-height: 86px;
+          margin-left: 42px;
+          padding: 8px 10px;
+          font-size: 12px;
+          line-height: 1.4;
+        }
+
+        .insight-label {
+          margin: 8px 0 5px;
+          font-size: 10px;
+        }
+
+        .insight-tabs {
+          gap: 5px;
+        }
+
+        .insight-tab {
+          min-height: 35px;
+          padding: 5px 7px;
+          font-size: 12px;
+        }
+
+        .insight-copy {
+          max-height: 58px;
+          margin-top: 6px;
+          padding: 8px 10px;
+          font-size: 13px;
+          line-height: 1.4;
+        }
+
+        .facts-heading {
+          margin: 10px 0 5px;
+          color: #34473b;
+          font-size: 12px;
+          font-weight: 800;
+        }
+
+        .fact-list {
+          gap: 6px;
+          margin-top: 0;
+        }
+
+        .fact-list li {
+          padding-left: 18px;
+          font-size: 14px;
+          line-height: 1.4;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          margin-top: 9px;
+          padding: 10px 12px;
+          font-size: 13px;
+          line-height: 1.4;
+        }
+
+        .completion.show {
+          margin-top: 8px;
+          padding: 8px 10px;
+          font-size: 12px;
+        }
+
+        .fieldbook-head h2 {
+          font-size: 16px;
+        }
+
+        .station-link {
+          min-height: 36px;
+        }
+
+        .station-name {
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .facts-heading {
+          margin: 4px 0 2px;
+          font-size: 10px;
+          font-weight: 800;
+        }
+
+        .detail-copy {
+          font-size: 12px;
+          line-height: 1.35;
+          -webkit-line-clamp: 2;
+        }
+
+        .fact-list {
+          gap: 3px;
+        }
+
+        .fact-list li {
+          font-size: 11px;
+          line-height: 1.25;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          font-size: 11px;
+          line-height: 1.3;
+        }
+
+        .guide-name {
+          font-size: 12px;
+        }
+
+        .guide-button {
+          font-size: 11px;
+        }
+
+        .insight-copy {
+          font-size: 11px;
+          line-height: 1.3;
+        }
+      }
+
+      @media (max-width: 800px) and (max-height: 650px) {
+        .facts-heading {
+          margin-block: 2px 1px;
+          font-size: 9px;
+        }
+
+        .fact-list {
+          gap: 1px;
+        }
+
+        .fact-list li {
+          font-size: 9px;
+          line-height: 1.1;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          font-size: 9px;
+          line-height: 1.15;
+        }
+      }
+
+      @media (min-width: 801px) and (max-height: 800px) {
+        .detail {
+          padding: 9px 12px;
+        }
+
+        .detail-copy {
+          margin-bottom: 5px;
+          line-height: 1.3;
+        }
+
+        .facts-heading {
+          margin: 5px 0 3px;
+        }
+
+        .fact-list {
+          gap: 3px;
+        }
+
+        .fact-list li {
+          font-size: 13px;
+          line-height: 1.3;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          margin-top: 5px;
+          padding: 7px 9px;
+          font-size: 12px;
+          line-height: 1.3;
+        }
+
+        .completion.show {
+          display: none !important;
+        }
+
+        .side {
+          grid-template-rows: minmax(0, 1fr) auto;
+        }
+
+        .fieldbook {
+          padding: 6px 8px;
+        }
+
+        .station-list {
+          grid-template-columns: repeat(7, minmax(0, 1fr));
+          gap: 2px;
+        }
+
+        .station-link {
+          display: grid;
+          grid-template-rows: 15px 12px;
+          min-height: 29px;
+          gap: 0;
+          padding: 1px;
+        }
+
+        .station-glyph {
+          width: auto;
+          font-size: 13px;
+        }
+
+        .station-name {
+          font-size: 9px;
+          line-height: 1.15;
+          text-align: center;
+        }
+
+        .station-state {
+          position: absolute;
+          top: 0;
+          right: 1px;
+          width: auto;
+          font-size: 8px;
+        }
+
+        .detail h2 {
+          font-size: 21px;
+        }
+
+        .guide {
+          margin-block: 2px;
+          padding: 3px 5px;
+        }
+
+        .guide-avatar {
+          width: 29px;
+          height: 29px;
+          flex-basis: 29px;
+        }
+
+        .insight-label {
+          margin-block: 2px;
+        }
+
+        .insight-tab {
+          min-height: 28px;
+        }
+
+        .insight-copy {
+          max-height: 34px;
+          margin-top: 2px;
+          padding: 4px 6px;
+          font-size: 12px;
+        }
+
+        .facts-heading {
+          margin: 4px 0 2px;
+          font-size: 11px;
+        }
+
+        .fact-list {
+          gap: 2px;
+        }
+
+        .fact-list li {
+          font-size: 12px;
+          line-height: 1.2;
+        }
+
+        .detail-tip,
+        .detail-tip.show {
+          margin-top: 3px;
+          padding: 5px 7px;
+          font-size: 11px;
+          line-height: 1.2;
+        }
+      }
+
+      @media (min-width: 801px) {
+        .completion.show {
+          display: none !important;
+        }
+      }
+
+      .detail:has(.guide-quote.show) .insight-label,
+      .detail:has(.guide-quote.show) .insight-tabs,
+      .detail:has(.guide-quote.show) .insight-copy {
+        display: none !important;
+      }
+
+      @media (max-width: 800px) and (max-height: 650px) {
+        .guide-quote {
+          max-height: 26px;
+          padding: 2px 5px;
+          font-size: 9px;
+          line-height: 1.2;
+        }
+
+        .completion.show {
+          display: none !important;
+        }
+      }
+
+      .completion.show {
+        display: flex !important;
+        align-items: center;
+        gap: 9px;
+        min-height: 42px;
+        margin-top: 8px;
+        padding: 9px 12px;
+        border: 1px solid #cde6cc;
+        border-radius: 11px;
+        background: #eaf6e7;
+        color: #285d3b;
+        font-size: 12px;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+        animation: scene-arrive 260ms ease both;
+      }
+
+      .completion.show::before {
+        content: "✓";
+        display: grid;
+        flex: 0 0 24px;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        border-radius: 50%;
+        background: #d2ebd0;
+        color: #286a42;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .detail:has(.completion.show) .topic-figure,
+      .detail:has(.completion.show) .insight-label,
+      .detail:has(.completion.show) .insight-tabs,
+      .detail:has(.completion.show) .insight-copy {
+        display: none !important;
+      }
+
+      .detail-tip.show {
+        animation: scene-arrive 200ms ease both;
+        overflow-wrap: anywhere;
+      }
+
+      .map-action {
+        max-width: calc(100% - 24px);
+        min-height: 44px;
+        padding: 8px 14px;
+        border: 1px solid #ffffff4d;
+        border-radius: 12px;
+        font-size: 13px;
+        line-height: 1.25;
+        text-align: center;
+        box-shadow: 0 8px 22px #173f2c3d;
+      }
+
+      @media (max-width: 800px) {
+        .completion.show {
+          min-height: 34px;
+          gap: 6px;
+          margin-top: 4px;
+          padding: 5px 7px;
+          border-radius: 8px;
+          font-size: 10px;
+          line-height: 1.2;
+        }
+
+        .completion.show::before {
+          flex-basis: 19px;
+          width: 19px;
+          height: 19px;
+          font-size: 12px;
+        }
+
+        .map-action {
+          right: 7px;
+          bottom: 7px;
+          min-height: 36px;
+          padding: 6px 10px;
+          font-size: 11px;
+        }
+      }
+
+      @media (max-width: 800px) and (max-height: 650px) {
+        .completion.show {
+          min-height: 27px;
+          margin-top: 2px;
+          padding: 3px 5px;
+          font-size: 9px;
+        }
+
+        .completion.show::before {
+          flex-basis: 17px;
+          width: 17px;
+          height: 17px;
+          font-size: 10px;
+        }
+      }
+
+      @media (min-width: 801px) and (max-height: 800px) {
+        .completion.show {
+          min-height: 33px;
+          margin-top: 4px;
+          padding: 5px 8px;
+          font-size: 11px;
+        }
+
+        .completion.show::before {
+          flex-basis: 20px;
+          width: 20px;
+          height: 20px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"
+          ><svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M5 16.5c3.8-1.2 6.2-3.6 7.1-9 2 4.1 4.1 6.2 7 7.1-4.5.2-7.2 1.9-9.1 5.4-.5-2.3-2.1-3.4-5-3.5Z"
+              fill="currentColor"
+            /></svg></span
+        >Personalmanagement ⋅ Grundlagen
+      </div>
+      <div class="top-meta">
+        <span>PERSONAL-CAMPUS</span
+        ><span class="top-count"
+          ><span class="count-dot"></span
+          ><span id="header-count">0 / 7 ORTE</span></span
+        >
+      </div>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Ein Spaziergang durchs Personalmanagement</p>
+          <h1 id="page-title">Willkommen auf dem Campus.</h1>
+          <p class="subtitle">
+            Klicke auf die Wege, triff das Team und entdecke, was gutes
+            Personalmanagement ausmacht.
+          </p>
+        </div>
+        <div
+          class="progress"
+          id="progress"
+          role="progressbar"
+          aria-label="Erkundungsfortschritt"
+          aria-valuemin="0"
+          aria-valuemax="7"
+          aria-valuenow="0"
+          aria-valuetext="0 von 7 Orten entdeckt"
+        >
+          <div class="progress-label">
+            <span>Dein Wissensbuch</span
+            ><span id="progress-text">0 von 7 Orten</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </section>
+      <div class="layout">
+        <section class="map-frame" aria-label="Erkundbare Campus-Karte">
+          <canvas
+            id="world-map"
+            width="1200"
+            height="800"
+            aria-label="2D-Karte des Personal-Campus mit sieben Lernorten"
+          ></canvas>
+          <div class="map-caption">
+            <span>●</span> PERSONAL-CAMPUS
+            <span id="map-location">CAMPUS</span>
+            <span id="map-count">0 / 7</span>
+          </div>
+          <div class="map-controls">
+            Klicke auf einen Weg, um dorthin zu laufen.
+          </div>
+          <button class="map-action" id="discover-button" type="button">
+            Ort entdecken
+          </button>
+        </section>
+        <aside class="side" aria-label="Wissensbuch und Lernstation">
+          <section class="detail" aria-live="polite">
+            <div class="detail-icon" id="detail-icon" aria-hidden="true">
+              🗺️
+            </div>
+            <p class="detail-tag" id="detail-tag">
+              ERSTER HALT · PERSONAL-CAMPUS
+            </p>
+            <figure class="topic-figure">
+              <img
+                class="topic-art"
+                id="topic-art"
+                alt="Illustration des Personalmanagement-Campus"
+              />
+              <figcaption class="topic-caption" id="topic-caption">
+                Deine Reise beginnt hier
+              </figcaption>
+            </figure>
+            <h2 id="detail-title">Was ist Personalmanagement?</h2>
+            <p class="detail-copy" id="detail-copy">
+              Personalmanagement kümmert sich um alle Fragen rund um die
+              Mitarbeitenden eines Unternehmens.
+            </p>
+            <div class="guide">
+              <span class="guide-avatar" id="guide-avatar" aria-hidden="true"
+                >?</span
+              ><span class="guide-meta"
+                ><span class="guide-name" id="guide-name">Dein Team wartet</span
+                ><span class="guide-role" id="guide-role"
+                  >Sieben Menschen, sieben Perspektiven</span
+                ></span
+              ><button class="guide-button" id="guide-button" type="button">
+                Hallo sagen
+              </button>
+            </div>
+            <p class="guide-quote" id="guide-quote" role="status"></p>
+            <p class="insight-label">Klick dich tiefer ins Thema</p>
+            <div
+              class="insight-tabs"
+              id="insight-tabs"
+              role="tablist"
+              aria-label="Wissens-Impulse"
+            ></div>
+            <p class="insight-copy" id="insight-copy">
+              Entdecke eine Station, um mehr zu erfahren.
+            </p>
+            <p class="facts-heading">Das Wichtigste auf einen Blick</p>
+            <ul class="fact-list" id="fact-list">
+              <li>Neue Lernorte werden Schritt für Schritt freigeschaltet.</li>
+              <li>Entdeckte Inhalte bleiben in deinem Wissensbuch.</li>
+            </ul>
+            <div class="detail-tip" id="detail-tip">
+              Klicke auf einen Ort im Wissensbuch oder direkt auf der Karte. Zum
+              freien Umherlaufen klickst du auf einen Weg.
+            </div>
+            <div class="completion" id="completion">
+              Campus komplett erkundet! Du kennst jetzt Bedeutung, Aufgaben und
+              Ziele des Personalmanagements.
+            </div>
+          </section>
+          <section class="fieldbook" aria-label="Lernorte">
+            <div class="fieldbook-head">
+              <h2>Wissensbuch</h2>
+              <span id="fieldbook-count">0 / 7</span>
+            </div>
+            <nav
+              class="station-list"
+              id="station-list"
+              aria-label="Campus-Lernorte"
+            ></nav>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <script>
+      const stations = [
+        {
+          id: "meaning",
+          title: "Was ist Personalmanagement?",
+          short: "Bedeutung",
+          icon: "🧭",
+          x: 240,
+          y: 245,
+          building: [240, 163, "#dfb86b", "#c97557"],
+          copy: "Personalmanagement kümmert sich um alle Fragen rund um die Mitarbeitenden eines Unternehmens.",
+          facts: [
+            "Es begleitet Mitarbeitende von der Personalplanung und Einstellung bis zur Entwicklung und Entlohnung.",
+            "Das Ziel: motivierte, qualifizierte und zufriedene Mitarbeitende.",
+            "Auch Führung, Zusammenarbeit und ein gutes Arbeitsklima gehören dazu.",
+          ],
+          tip: "Menschen und Arbeit so zusammenbringen, dass beide sich gut entwickeln können.",
+        },
+        {
+          id: "planning",
+          title: "Personalbedarf planen",
+          short: "Planung",
+          icon: "🧭",
+          x: 560,
+          y: 257,
+          building: [560, 172, "#e9ca7b", "#dc9865"],
+          copy: "Hier wird überlegt, wie viele Mitarbeitende ein Unternehmen braucht und welche Fähigkeiten gefragt sind.",
+          facts: [
+            "Aufgaben, Arbeitsmenge und vorhandene Kapazitäten einschätzen.",
+            "Den Bedarf an Mitarbeitenden und Qualifikationen vorausschauend planen.",
+            "So lassen sich Engpässe und Überbesetzung früh erkennen.",
+          ],
+          tip: "Leitfrage: Wie viele Mitarbeitende werden gebraucht?",
+        },
+        {
+          id: "gain",
+          title: "Personal gewinnen",
+          short: "Team finden",
+          icon: "🧲",
+          x: 930,
+          y: 290,
+          building: [930, 205, "#e4a18a", "#bf6652"],
+          copy: "Wenn Mitarbeitende fehlen, sucht das Unternehmen passende Menschen und lädt sie ein, Teil des Teams zu werden.",
+          facts: [
+            "Stellen und Anforderungen beschreiben.",
+            "Mitarbeitende suchen, auswählen und einstellen.",
+            "Die Auswahl soll fair und passend zur Stelle sein.",
+          ],
+          tip: "Ein klares Anforderungsprofil bringt Menschen und Stelle passend zusammen.",
+        },
+        {
+          id: "develop",
+          title: "Personal entwickeln",
+          short: "Lernwerkstatt",
+          icon: "🌱",
+          x: 980,
+          y: 565,
+          building: [980, 480, "#8fc29b", "#4d916e"],
+          copy: "Menschen lernen dazu und bauen ihre Fähigkeiten für neue oder veränderte Aufgaben aus.",
+          facts: [
+            "Schulungen und Weiterbildung ermöglichen.",
+            "Qualifikationen stärken und Entwicklung begleiten.",
+            "Auch die Einarbeitung neuer Teammitglieder gehört dazu.",
+          ],
+          tip: "Weiterbildung hält das Wissen im Team aktuell.",
+        },
+        {
+          id: "lead",
+          title: "Personal führen",
+          short: "Teamplatz",
+          icon: "🤝",
+          x: 720,
+          y: 660,
+          building: [720, 575, "#87b7b3", "#42827b"],
+          copy: "Gute Führung unterstützt Menschen dabei, miteinander zu arbeiten und gemeinsam Ziele zu erreichen.",
+          facts: [
+            "Motivation und konstruktives Feedback fördern.",
+            "Zusammenarbeit stärken und Konflikte früh erkennen.",
+            "Klare Ziele geben dem Team Orientierung im Alltag.",
+          ],
+          tip: "Zuhören, Feedback und ein gutes Miteinander verbessern das Arbeitsklima.",
+        },
+        {
+          id: "pay",
+          title: "Personal entlohnen",
+          short: "Fair bezahlen",
+          icon: "⚖️",
+          x: 340,
+          y: 660,
+          building: [340, 575, "#b0a5cf", "#7768a0"],
+          copy: "Mitarbeitende erhalten eine faire Bezahlung für ihre Arbeit und können zusätzliche Leistungen erhalten.",
+          facts: [
+            "Gerechte Bezahlung nachvollziehbar gestalten.",
+            "Sozialleistungen als Teil der Entlohnung berücksichtigen.",
+            "Aufgaben, Verantwortung und Leistung fließen in die Vergütung ein.",
+          ],
+          tip: "Faire Entlohnung berücksichtigt Aufgaben und Verantwortung.",
+        },
+        {
+          id: "goals",
+          title: "Die Ziele im Zielgarten",
+          short: "Zielgarten",
+          icon: "🌼",
+          x: 565,
+          y: 445,
+          building: [565, 372, "#bad477", "#73983f"],
+          copy: "Gutes Personalmanagement verbindet den Erfolg des Unternehmens mit den Bedürfnissen der Menschen, die dort arbeiten.",
+          facts: [
+            "Leistung steigern.",
+            "Mitarbeiterzufriedenheit sichern.",
+            "Arbeitsklima verbessern.",
+            "Konflikte vermeiden.",
+          ],
+          tip: "Gutes Arbeitsklima und zufriedene Mitarbeitende unterstützen gute Leistung.",
+        },
+      ];
+
+      const canvas = document.getElementById("world-map");
+      const sceneDetails = {
+        welcome: {
+          background: "#dcebd7",
+          accent: "#ecb568",
+          caption: "Dein Rundgang beginnt hier",
+          art: '<path d="M72 276h496" stroke="#728b68" stroke-width="3"/><circle cx="320" cy="146" r="69" fill="#f0c26f"/><path d="M272 271v-61q0-48 48-48t48 48v61" fill="#3c8164"/><circle cx="320" cy="155" r="25" fill="#f1c7a0"/><path d="M293 151q3-37 31-34 22 3 25 33-18-15-56 1" fill="#453b33"/><path d="M139 99h105v74H139zM395 99h105v74H395z" rx="8" fill="#fffefa" stroke="#aabca4" stroke-width="3"/><path d="M160 123h61M160 144h39M416 123h63M416 144h39" stroke="#7ca387" stroke-width="7" stroke-linecap="round"/><path d="M242 136h29M369 136h26" stroke="#638575" stroke-width="3" stroke-dasharray="6 7"/>',
+        },
+        meaning: {
+          background: "#e7ebd7",
+          accent: "#6eaa81",
+          caption: "Menschen, Aufgaben und Zusammenarbeit",
+          host: "Nora",
+          role: "Teamleitung",
+          quote:
+            "Personalmanagement begleitet Menschen im ganzen Unternehmen. Gute Arbeit entsteht, wenn passende Aufgaben und gute Unterstützung zusammenkommen.",
+          insights: [
+            "Es geht um alle Fragen rund um Mitarbeitende.",
+            "Menschen brauchen passende Aufgaben und Entwicklung.",
+            "Das Ziel sind motivierte, qualifizierte und zufriedene Mitarbeitende.",
+          ],
+          art: '<path d="M92 279h456" stroke="#829477" stroke-width="3"/><path d="M177 120h111v68H177zM352 120h111v68H352z" rx="10" fill="#fffefa" stroke="#bdcbb3" stroke-width="3"/><path d="M196 143h70M196 163h43M371 143h70M371 163h47" stroke="#74a57b" stroke-width="7" stroke-linecap="round"/><path d="M286 155h67" stroke="#698875" stroke-width="3" stroke-dasharray="5 8"/><circle cx="320" cy="129" r="25" fill="#edc29e"/><path d="M292 126q5-39 33-34 21 3 23 32-23-17-56 2" fill="#493d34"/><path d="M281 275v-62q0-40 39-40t39 40v62" fill="#46816a"/><circle cx="119" cy="219" r="26" fill="#e99a7c"/><circle cx="500" cy="219" r="26" fill="#90a5d2"/><path d="M88 279v-25q0-28 31-28t31 28v25M469 279v-25q0-28 31-28t31 28v25" fill="#d98968"/>',
+        },
+        planning: {
+          background: "#f2ead0",
+          accent: "#d69c47",
+          caption: "Bedarf erkennen, bevor es eng wird",
+          host: "Mika",
+          role: "Personalplanung",
+          quote:
+            "Wir schauen zuerst auf die Aufgaben und die vorhandene Arbeitszeit. Daraus ergibt sich, wie viele Menschen mit welchen Fähigkeiten gebraucht werden.",
+          insights: [
+            "Welche Aufgaben und wie viel Arbeit stehen an?",
+            "Wie viele Mitarbeitende und welche Qualifikationen fehlen?",
+            "Vorausschauend planen hilft, Engpässe zu vermeiden.",
+          ],
+          art: '<rect x="105" y="77" width="302" height="193" rx="12" fill="#fffdf4" stroke="#cbbd99" stroke-width="4"/><path d="M138 111h171" stroke="#567663" stroke-width="10" stroke-linecap="round"/><path d="M140 235v-37h38v37M201 235v-74h38v74M262 235v-105h38v105M323 235v-61h38v61" fill="#e6b55b"/><path d="M140 249h220" stroke="#d8d0bb" stroke-width="3"/><circle cx="476" cy="139" r="27" fill="#edc29e"/><path d="M447 136q4-38 33-34 23 4 24 34-23-17-57 0" fill="#493d34"/><path d="M438 281v-91q0-35 39-35t39 35v91" fill="#579274"/><path d="M449 206l-48 34" stroke="#edc29e" stroke-width="13" stroke-linecap="round"/><path d="M431 82h89v26h-89z" rx="6" fill="#f0d68d"/>',
+        },
+        gain: {
+          background: "#f4e1d6",
+          accent: "#df8064",
+          caption: "Die richtigen Menschen finden",
+          host: "Samira",
+          role: "Recruiting",
+          quote:
+            "Wir beschreiben klar, was die Stelle braucht, und suchen dann Menschen, deren Stärken dazu passen. Jede Person soll fair beurteilt werden.",
+          insights: [
+            "Stellen und Anforderungen verständlich beschreiben.",
+            "Bewerbungen passend und fair auswählen.",
+            "Neue Mitarbeitende finden und einstellen.",
+          ],
+          art: '<path d="M128 238h390" stroke="#947a65" stroke-width="4"/><path d="M199 234v42M448 234v42" stroke="#947a65" stroke-width="8"/><rect x="279" y="188" width="113" height="68" rx="6" fill="#c98761"/><rect x="290" y="177" width="91" height="18" rx="5" fill="#f3dca5"/><circle cx="209" cy="120" r="26" fill="#8b5949"/><path d="M181 119q4-38 31-33 22 3 24 34-19-12-55-1" fill="#302f35"/><path d="M170 224v-57q0-36 39-36t39 36v57" fill="#557f9b"/><circle cx="453" cy="120" r="26" fill="#edc29e"/><path d="M425 119q4-38 31-34 22 4 23 34-23-13-54 0" fill="#694d42"/><path d="M414 224v-57q0-36 39-36t39 36v57" fill="#d47e65"/><path d="M239 168l45 27M414 168l-34 26" stroke="#edc29e" stroke-width="12" stroke-linecap="round"/><path d="M304 107h100v48h-100z" rx="9" fill="#fffefa" stroke="#dbb2a0" stroke-width="3"/><path d="M320 125h67M320 139h42" stroke="#d4866e" stroke-width="6" stroke-linecap="round"/>',
+        },
+        develop: {
+          background: "#d9e9e3",
+          accent: "#55a28c",
+          caption: "Wissen wächst mit jeder neuen Fähigkeit",
+          host: "Alex",
+          role: "Weiterbildung",
+          quote:
+            "Wenn sich Aufgaben ändern, lernen wir gemeinsam dazu. Schulungen geben allen die Chance, sicherer und selbstständiger zu werden.",
+          insights: [
+            "Schulungen und Weiterbildung ermöglichen.",
+            "Fähigkeiten für neue Aufgaben aufbauen.",
+            "Lernen stärkt Selbstvertrauen und Leistung.",
+          ],
+          art: '<rect x="92" y="78" width="295" height="188" rx="14" fill="#fffefa" stroke="#9ab7a8" stroke-width="4"/><rect x="111" y="97" width="257" height="142" rx="7" fill="#b8ded4"/><path d="M135 212l46-45 37 28 49-63 73 80" fill="none" stroke="#438c70" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="181" cy="167" r="8" fill="#df916a"/><circle cx="267" cy="132" r="8" fill="#df916a"/><path d="M216 268h48M239 266v22" stroke="#758b80" stroke-width="9" stroke-linecap="round"/><circle cx="481" cy="133" r="27" fill="#edc29e"/><path d="M452 131q5-39 33-35 22 4 24 34-22-16-57 1" fill="#433c35"/><path d="M439 278v-91q0-38 42-38t42 38v91" fill="#df916a"/><path d="M443 202l-56 12" stroke="#edc29e" stroke-width="13" stroke-linecap="round"/><path d="M453 72l9 18 20 3-15 13 4 20-18-10-18 10 4-20-15-13 20-3z" fill="#eac970"/>',
+        },
+        lead: {
+          background: "#dce9e4",
+          accent: "#5a9b86",
+          caption: "Gemeinsam geht mehr",
+          host: "Lena",
+          role: "Teamführung",
+          quote:
+            "Gute Führung heißt für mich: zuhören, klares Feedback geben und Hindernisse gemeinsam aus dem Weg räumen.",
+          insights: [
+            "Motivation und Orientierung geben.",
+            "Feedback und Zusammenarbeit fördern.",
+            "Konflikte früh ansprechen und gemeinsam lösen.",
+          ],
+          art: '<ellipse cx="320" cy="228" rx="214" ry="67" fill="#b98865"/><ellipse cx="320" cy="211" rx="214" ry="66" fill="#e9c899" stroke="#9b755b" stroke-width="4"/><circle cx="206" cy="126" r="25" fill="#edc29e"/><path d="M179 124q4-35 31-33 20 2 23 32-20-12-54 1" fill="#534137"/><path d="M171 205v-39q0-35 36-35t36 35v39" fill="#5c8ea0"/><circle cx="320" cy="105" r="25" fill="#d79a76"/><path d="M293 103q4-37 31-33 20 3 23 33-21-13-54 0" fill="#37343b"/><path d="M284 188v-42q0-35 36-35t36 35v42" fill="#d57b63"/><circle cx="433" cy="126" r="25" fill="#edc29e"/><path d="M406 124q4-36 31-33 20 3 23 33-21-13-54 0" fill="#6e5547"/><path d="M397 205v-39q0-35 36-35t36 35v39" fill="#779465"/><path d="M246 92h86v41h-86z" rx="10" fill="#fffefa"/><path d="M263 108h52M263 120h34" stroke="#6d9a83" stroke-width="5" stroke-linecap="round"/><path d="M455 79h82v38h-82z" rx="10" fill="#fffefa"/><path d="M470 96h51" stroke="#df9378" stroke-width="6" stroke-linecap="round"/>',
+        },
+        pay: {
+          background: "#e8e2ef",
+          accent: "#8877aa",
+          caption: "Faire Bezahlung zeigt Wertschätzung",
+          host: "Jonas",
+          role: "Personalverrechnung",
+          quote:
+            "Eine faire Bezahlung ist nachvollziehbar und berücksichtigt Aufgaben und Verantwortung. Dazu können auch Sozialleistungen gehören.",
+          insights: [
+            "Gerechte Bezahlung passend gestalten.",
+            "Aufgaben und Verantwortung berücksichtigen.",
+            "Sozialleistungen ergänzen das Entgelt.",
+          ],
+          art: '<rect x="112" y="72" width="245" height="221" rx="13" fill="#fffefa" stroke="#b8abc9" stroke-width="4"/><path d="M145 113h177M145 139h114M145 168h152" stroke="#b8abc9" stroke-width="8" stroke-linecap="round"/><path d="M145 211h54M145 235h83" stroke="#79a482" stroke-width="8" stroke-linecap="round"/><circle cx="465" cy="120" r="27" fill="#edc29e"/><path d="M437 119q4-38 32-34 21 3 23 34-21-14-55 0" fill="#4a3933"/><path d="M425 238v-77q0-34 40-34t40 34v77" fill="#66899a"/><circle cx="457" cy="253" r="28" fill="#efc96c" stroke="#bc9747" stroke-width="4"/><circle cx="511" cy="263" r="23" fill="#efd078" stroke="#bc9747" stroke-width="4"/><path d="M457 239v28M446 248h20M511 251v23M501 258h20" stroke="#aa813a" stroke-width="4" stroke-linecap="round"/><path d="M387 112h36" stroke="#de8c70" stroke-width="9" stroke-linecap="round"/>',
+        },
+        goals: {
+          background: "#e9edcf",
+          accent: "#7e9e4e",
+          caption: "Vier Ziele, die zusammen wachsen",
+          host: "Emil",
+          role: "Garten-Team",
+          quote:
+            "Leistung, Zufriedenheit und ein gutes Arbeitsklima gehören zusammen. Wenn wir Konflikte vermeiden, kann das Team gemeinsam wachsen.",
+          insights: [
+            "Leistung steigern.",
+            "Mitarbeiterzufriedenheit sichern.",
+            "Arbeitsklima verbessern und Konflikte vermeiden.",
+          ],
+          art: '<path d="M73 265q127-113 247-29 127 85 246-53" fill="none" stroke="#c5a973" stroke-width="13" stroke-linecap="round"/><path d="M105 281v-50M242 259v-82M395 258v-100M535 238v-55" stroke="#54845e" stroke-width="8" stroke-linecap="round"/><circle cx="105" cy="218" r="29" fill="#e28e72"/><circle cx="242" cy="145" r="29" fill="#e9bd62"/><circle cx="395" cy="126" r="29" fill="#79a9a0"/><circle cx="535" cy="169" r="29" fill="#9290bd"/><path d="M105 201v34M88 218h34M242 128v34M225 145h34M395 109v34M378 126h34M535 152v34M518 169h34" stroke="#fff4dd" stroke-width="5" stroke-linecap="round"/><path d="M281 90h80v39h-80z" rx="10" fill="#fffefa"/><path d="M297 108h49" stroke="#779b60" stroke-width="6" stroke-linecap="round"/>',
+        },
+      };
+
+      function artworkSource(scene) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320"><defs><linearGradient id="wash" x2="1" y2="1"><stop stop-color="${scene.background}"/><stop offset="1" stop-color="${scene.accent}" stop-opacity=".32"/></linearGradient><pattern id="grain" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#53634c" opacity=".12"/></pattern></defs><rect width="640" height="320" fill="url(#wash)"/><rect width="640" height="320" fill="url(#grain)"/><circle cx="530" cy="57" r="95" fill="#fffefa" opacity=".3"/><path d="M0 274q135-39 251 4t250-4q67-25 139-1v47H0Z" fill="#fffefa" opacity=".43"/><path d="M32 54h42M53 33v42M577 237h26M590 224v26" stroke="${scene.accent}" stroke-width="4" stroke-linecap="round" opacity=".6"/>${scene.art}</svg>`;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      }
+
+      function renderTopic(station) {
+        const scene = sceneDetails[station.id];
+        const image = byId("topic-art");
+        image.src = artworkSource(scene);
+        image.alt = `${station.title}: ${scene.caption}. Illustration mit ${scene.host} aus dem Bereich ${scene.role}.`;
+        byId("topic-caption").textContent = scene.caption;
+        byId("guide-avatar").textContent = scene.host.slice(0, 1);
+        byId("guide-name").textContent = scene.host;
+        byId("guide-role").textContent = scene.role;
+        byId("guide-button").textContent = `Mit ${scene.host} sprechen`;
+        byId("guide-button").dataset.station = station.id;
+        byId("guide-button").title = scene.quote;
+        byId("guide-button").disabled = false;
+        byId("guide-quote").textContent = `„${scene.quote}“`;
+        byId("guide-quote").classList.remove("show");
+        byId("guide-button").setAttribute("aria-expanded", "false");
+        byId("insight-tabs").replaceChildren(
+          ...scene.insights.map((insight, index) => {
+            const tab = document.createElement("button");
+            tab.type = "button";
+            tab.className = "insight-tab";
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", String(index === 0));
+            tab.dataset.index = String(index);
+            tab.textContent = ["Aufgabe", "Warum?", "Im Alltag"][index];
+            tab.title = insight;
+            return tab;
+          }),
+        );
+        byId("insight-copy").textContent = scene.insights[0];
+      }
+      const ctx = canvas.getContext("2d");
+      const player = { x: 105, y: 710, route: [], station: null, facing: 1 };
+      const visited = new Set();
+      let activeStation = null;
+      let nearbyStation = null;
+      let lastFrame = 0;
+      const byId = (id) => document.getElementById(id);
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      function isStationUnlocked(station) {
+        const index = stations.indexOf(station);
+        return index >= 0 && index <= visited.size;
+      }
+
+      function showLockedStation(station) {
+        const index = stations.indexOf(station);
+        if (index <= 0) return;
+        byId("detail-tip").textContent =
+          `Erkunde zuerst „${stations[index - 1].title}“. Danach wird dieser Ort freigeschaltet.`;
+        byId("detail-tip").classList.add("show");
+      }
+      const roads = [
+        [
+          [105, 710],
+          [170, 690],
+          [260, 680],
+          [340, 680],
+          [395, 680],
+          [520, 680],
+          [650, 680],
+          [720, 680],
+          [830, 680],
+        ],
+        [
+          [260, 680],
+          [235, 660],
+          [235, 345],
+          [240, 275],
+          [240, 255],
+        ],
+        [
+          [240, 275],
+          [455, 275],
+          [560, 275],
+          [560, 257],
+        ],
+        [
+          [395, 680],
+          [440, 650],
+          [440, 460],
+          [455, 460],
+          [455, 275],
+        ],
+        [
+          [455, 460],
+          [565, 460],
+          [565, 445],
+        ],
+        [
+          [340, 680],
+          [340, 660],
+        ],
+        [
+          [720, 680],
+          [720, 660],
+        ],
+        [
+          [830, 680],
+          [830, 565],
+          [830, 300],
+          [930, 300],
+        ],
+        [
+          [830, 565],
+          [980, 565],
+        ],
+      ];
+
+      function roadSegmentIsClear(start, end) {
+        const length = Math.hypot(end[0] - start[0], end[1] - start[1]);
+        const steps = Math.max(1, Math.ceil(length / 8));
+        return stations.every((station) => {
+          const [x, y] = station.building;
+          for (let step = 0; step <= steps; step += 1) {
+            const progress = step / steps;
+            const pointX = start[0] + (end[0] - start[0]) * progress;
+            const pointY = start[1] + (end[1] - start[1]) * progress;
+            if (
+              pointX >= x - 79 &&
+              pointX <= x + 79 &&
+              pointY >= y - 74 &&
+              pointY <= y + 64
+            )
+              return false;
+          }
+          return true;
+        });
+      }
+
+      function nearestRoadPoint(x, y) {
+        let nearest = null;
+        roads.forEach((road, roadIndex) => {
+          for (let index = 0; index < road.length - 1; index += 1) {
+            const start = road[index];
+            const end = road[index + 1];
+            if (!roadSegmentIsClear(start, end)) continue;
+            const dx = end[0] - start[0];
+            const dy = end[1] - start[1];
+            const lengthSquared = dx * dx + dy * dy;
+            const progress = clamp(
+              ((x - start[0]) * dx + (y - start[1]) * dy) / lengthSquared,
+              0,
+              1,
+            );
+            const pointX = start[0] + dx * progress;
+            const pointY = start[1] + dy * progress;
+            const distance = Math.hypot(x - pointX, y - pointY);
+            if (!nearest || distance < nearest.distance)
+              nearest = {
+                x: pointX,
+                y: pointY,
+                distance,
+                progress,
+                segment: `${roadIndex}:${index}`,
+                length: Math.sqrt(lengthSquared),
+              };
+          }
+        });
+        return nearest;
+      }
+
+      function routeAlongRoads(from, to) {
+        const start = nearestRoadPoint(from.x, from.y);
+        const finish = nearestRoadPoint(to.x, to.y);
+        if (start.segment === finish.segment)
+          return [
+            { x: start.x, y: start.y },
+            { x: finish.x, y: finish.y },
+          ];
+        const nodes = new Map();
+        const graph = new Map();
+        const key = (point) => `${point[0]},${point[1]}`;
+        roads.forEach((road) =>
+          road.forEach((point, index) => {
+            const node = key(point);
+            nodes.set(node, point);
+            if (!graph.has(node)) graph.set(node, []);
+            if (index > 0) {
+              const previousPoint = road[index - 1];
+              if (!roadSegmentIsClear(previousPoint, point)) return;
+              const previousKey = key(previousPoint);
+              const distance = Math.hypot(
+                point[0] - previousPoint[0],
+                point[1] - previousPoint[1],
+              );
+              graph.get(node).push({ node: previousKey, distance });
+              graph.get(previousKey).push({ node, distance });
+            }
+          }),
+        );
+        const startParts = start.segment.split(":").map(Number);
+        const endParts = finish.segment.split(":").map(Number);
+        const startRoad = roads[startParts[0]];
+        const endRoad = roads[endParts[0]];
+        const startA = key(startRoad[startParts[1]]);
+        const startB = key(startRoad[startParts[1] + 1]);
+        const endA = key(endRoad[endParts[1]]);
+        const endB = key(endRoad[endParts[1] + 1]);
+        const distances = new Map(
+          [...nodes.keys()].map((node) => [node, Infinity]),
+        );
+        const previous = new Map();
+        const remaining = new Set(nodes.keys());
+        distances.set(startA, start.progress * start.length);
+        distances.set(startB, (1 - start.progress) * start.length);
+        while (remaining.size) {
+          let current = null;
+          let best = Infinity;
+          remaining.forEach((node) => {
+            if (distances.get(node) < best) {
+              current = node;
+              best = distances.get(node);
+            }
+          });
+          if (current === null) break;
+          remaining.delete(current);
+          graph.get(current).forEach(({ node, distance }) => {
+            if (!remaining.has(node)) return;
+            const alternative = best + distance;
+            if (alternative < distances.get(node)) {
+              distances.set(node, alternative);
+              previous.set(node, current);
+            }
+          });
+        }
+        const endChoices = [
+          {
+            node: endA,
+            cost: distances.get(endA) + finish.progress * finish.length,
+          },
+          {
+            node: endB,
+            cost: distances.get(endB) + (1 - finish.progress) * finish.length,
+          },
+        ];
+        const destination =
+          endChoices[0].cost <= endChoices[1].cost
+            ? endChoices[0].node
+            : endChoices[1].node;
+        const waypoints = [];
+        let current = destination;
+        while (current) {
+          waypoints.unshift(nodes.get(current));
+          current = previous.get(current);
+        }
+        return [
+          { x: start.x, y: start.y },
+          ...waypoints.map(([pointX, pointY]) => ({ x: pointX, y: pointY })),
+          { x: finish.x, y: finish.y },
+        ];
+      }
+
+      function drawTree(x, y, scale = 1) {
+        ctx.fillStyle = "#78876a";
+        ctx.fillRect(x - 3 * scale, y, 6 * scale, 17 * scale);
+        ctx.fillStyle = "#739b63";
+        ctx.beginPath();
+        ctx.arc(x, y - 5 * scale, 15 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#91b77a";
+        ctx.beginPath();
+        ctx.arc(x - 6 * scale, y - 10 * scale, 7 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#628d58";
+        ctx.beginPath();
+        ctx.arc(x + 7 * scale, y - 4 * scale, 7 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawRoadNetwork() {
+        const path = new Path2D();
+        roads.forEach((road) => {
+          path.moveTo(road[0][0], road[0][1]);
+          road.slice(1).forEach(([x, y]) => path.lineTo(x, y));
+        });
+
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.setLineDash([]);
+        ctx.strokeStyle = "#c9b994";
+        ctx.lineWidth = 36;
+        ctx.stroke(path);
+        ctx.strokeStyle = "#eee3ca";
+        ctx.lineWidth = 28;
+        ctx.stroke(path);
+        ctx.strokeStyle = "#f5edda";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([7, 16]);
+        ctx.stroke(path);
+        ctx.setLineDash([]);
+
+        const junctions = new Map();
+        roads.forEach((road) => {
+          road.forEach((point) => {
+            const key = `${point[0]},${point[1]}`;
+            junctions.set(key, (junctions.get(key) || 0) + 1);
+          });
+        });
+        junctions.forEach((count, key) => {
+          if (count < 2) return;
+          const [x, y] = key.split(",").map(Number);
+          ctx.fillStyle = "#eee3ca";
+          ctx.beginPath();
+          ctx.arc(x, y, 10, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#f5edda";
+          ctx.beginPath();
+          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      function drawBuilding(station) {
+        const [x, y, wall, roof] = station.building;
+        ctx.fillStyle = "#53634c30";
+        ctx.beginPath();
+        ctx.ellipse(x, y + 48, 71, 17, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = wall;
+        ctx.strokeStyle = "#766f57";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(x - 54, y - 20, 108, 72, 5);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = roof;
+        ctx.strokeStyle = "#765a49";
+        ctx.beginPath();
+        ctx.moveTo(x - 67, y - 18);
+        ctx.lineTo(x, y - 62);
+        ctx.lineTo(x + 67, y - 18);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#fff4d7";
+        ctx.fillRect(x - 39, y + 1, 18, 19);
+        ctx.fillRect(x + 21, y + 1, 18, 19);
+        ctx.fillStyle = "#8d6148";
+        ctx.fillRect(x - 8, y + 17, 16, 35);
+        ctx.fillStyle = "#725845";
+        ctx.font = "700 14px sans-serif";
+        ctx.textAlign = "center";
+      }
+
+      function drawStation(station) {
+        const active = activeStation === station.id;
+        const unlocked = isStationUnlocked(station);
+        const pulse = 1 + Math.sin(Date.now() / 370 + station.x) * 0.06;
+        ctx.fillStyle = !unlocked
+          ? "#4e594d18"
+          : active
+            ? "#246c5030"
+            : "#31432b22";
+        ctx.beginPath();
+        ctx.arc(
+          station.x,
+          station.y,
+          (active ? 34 : 29) * pulse,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+        ctx.fillStyle = !unlocked ? "#d8d9d0" : active ? "#246c50" : "#fffefa";
+        ctx.strokeStyle = !unlocked
+          ? "#989d93"
+          : active
+            ? "#fffefa"
+            : "#55715b";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(station.x, station.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.font = "20px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = !unlocked ? "#7d8378" : active ? "#fff" : "#28392d";
+        ctx.fillText(unlocked ? station.icon : "🔒", station.x, station.y + 1);
+        if (visited.has(station.id)) {
+          ctx.fillStyle = "#246c50";
+          ctx.beginPath();
+          ctx.arc(station.x + 17, station.y - 17, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.font = "700 11px sans-serif";
+          ctx.fillText("✓", station.x + 17, station.y - 16);
+        }
+        ctx.font = "700 13px sans-serif";
+        const labelWidth = ctx.measureText(station.short).width + 14;
+        ctx.fillStyle = "#fffefaed";
+        ctx.beginPath();
+        ctx.roundRect(
+          station.x - labelWidth / 2,
+          station.y + 28,
+          labelWidth,
+          18,
+          5,
+        );
+        ctx.fill();
+        ctx.fillStyle = "#415248";
+        ctx.textBaseline = "middle";
+        ctx.fillText(station.short, station.x, station.y + 37);
+        ctx.textBaseline = "alphabetic";
+      }
+
+      function drawPlayer(time) {
+        const bob = player.route.length
+          ? Math.sin(time / 55) * 2
+          : Math.sin(time / 480) * 1.2;
+        ctx.fillStyle = "#263b2d35";
+        ctx.beginPath();
+        ctx.ellipse(player.x, player.y + 12, 13, 6, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#394b3a";
+        ctx.fillRect(player.x - 5, player.y + 3 + bob, 4, 10);
+        ctx.fillRect(player.x + 2, player.y + 3 - bob, 4, 10);
+        ctx.fillStyle = "#df785d";
+        ctx.beginPath();
+        ctx.roundRect(player.x - 9, player.y - 2 + bob, 18, 13, 5);
+        ctx.fill();
+        ctx.fillStyle = "#f1c7a0";
+        ctx.beginPath();
+        ctx.arc(player.x, player.y - 9 + bob, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#4b3b32";
+        ctx.beginPath();
+        ctx.arc(player.x, player.y - 12 + bob, 7, Math.PI, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#2c3028";
+        ctx.beginPath();
+        ctx.arc(
+          player.x + player.facing * 2,
+          player.y - 9 + bob,
+          1.2,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+      }
+
+      function drawWorld(time = 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#dce9cb";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#d8e9e7";
+        ctx.beginPath();
+        ctx.moveTo(1098, 27);
+        ctx.bezierCurveTo(1048, 20, 1019, 73, 1026, 130);
+        ctx.bezierCurveTo(1019, 195, 1050, 270, 1093, 311);
+        ctx.bezierCurveTo(1124, 341, 1158, 309, 1174, 257);
+        ctx.bezierCurveTo(1195, 190, 1179, 99, 1153, 56);
+        ctx.bezierCurveTo(1137, 34, 1117, 24, 1098, 27);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "#b9cec1";
+        ctx.lineWidth = 10;
+        ctx.stroke();
+        ctx.strokeStyle = "#91b9bb";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.strokeStyle = "#c0d9d8";
+        ctx.lineWidth = 2;
+        [
+          [1062, 90, 30],
+          [1083, 147, 24],
+          [1090, 213, 32],
+        ].forEach(([x, y, width]) => {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.quadraticCurveTo(x + width / 2, y - 5, x + width, y);
+          ctx.stroke();
+        });
+        ctx.fillStyle = "#c9dcb8";
+        [
+          [90, 135, 48],
+          [415, 290, 55],
+          [830, 115, 36],
+          [1025, 370, 0.95],
+          [105, 485, 40],
+          [485, 730, 35],
+          [865, 735, 45],
+          [1115, 650, 34],
+        ].forEach(([x, y, r]) => {
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        drawRoadNetwork();
+        [
+          [104, 155, 1.15],
+          [145, 300, 1],
+          [390, 125, 1],
+          [425, 410, 0.9],
+          [405, 480, 1],
+          [660, 120, 0.9],
+          [750, 250, 1],
+          [810, 195, 1.1],
+          [1035, 305, 0.9],
+          [1048, 440, 1.1],
+          [1075, 680, 1],
+          [850, 725, 0.9],
+          [175, 515, 0.9],
+          [520, 750, 0.8],
+          [780, 360, 0.8],
+          [630, 340, 0.75],
+        ].forEach(([x, y, s]) => drawTree(x, y, s));
+        ctx.fillStyle = "#f6df91";
+        ctx.beginPath();
+        ctx.arc(80, 80, 27, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#fff3b3";
+        ctx.beginPath();
+        ctx.arc(80, 80, 19, 0, Math.PI * 2);
+        ctx.fill();
+        stations.forEach(drawBuilding);
+        stations.forEach(drawStation);
+        ctx.fillStyle = "#fffefa";
+        ctx.strokeStyle = "#73866b";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(67, 682, 76, 38, 5);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#40523d";
+        ctx.font = "700 11px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("CAMPUS", 105, 701);
+        ctx.textBaseline = "alphabetic";
+        drawPlayer(time);
+      }
+
+      function renderStationList() {
+        byId("station-list").replaceChildren(
+          ...stations.map((station) => {
+            const stationIndex = stations.indexOf(station);
+            const unlocked = isStationUnlocked(station);
+            const button = document.createElement("button");
+            button.type = "button";
+            button.disabled = !unlocked;
+            button.className = `station-link${visited.has(station.id) ? " visited" : ""}${activeStation === station.id ? " current" : ""}${unlocked ? "" : " locked"}`;
+            button.setAttribute(
+              "aria-label",
+              `${station.title}${visited.has(station.id) ? ", entdeckt" : unlocked ? "" : ", gesperrt"}. Zum Ort laufen.`,
+            );
+            const prerequisite = unlocked
+              ? ""
+              : `Gesperrt. Entdecke zuerst ${stations[stationIndex - 1].title}.\n`;
+            button.title = `${prerequisite}${station.title}\n${station.copy}\nHier lernst du: ${station.facts.join(" ")}`;
+            button.innerHTML = `<span class="station-glyph" aria-hidden="true">${unlocked ? station.icon : "🔒"}</span><span class="station-name"></span><span class="station-state" aria-hidden="true">${visited.has(station.id) ? "✓" : unlocked ? "·" : "🔒"}</span>`;
+            button.querySelector(".station-name").textContent = station.short;
+            button.addEventListener("click", () => travelTo(station));
+            return button;
+          }),
+        );
+      }
+
+      function updateProgress() {
+        const count = visited.size;
+        byId("progress-text").textContent =
+          `${count} von ${stations.length} Orten`;
+        byId("progress").setAttribute("aria-valuemax", String(stations.length));
+        byId("progress").setAttribute("aria-valuenow", String(count));
+        byId("progress").setAttribute(
+          "aria-valuetext",
+          `${count} von ${stations.length} Orten entdeckt`,
+        );
+        byId("fieldbook-count").textContent = `${count} / ${stations.length}`;
+        byId("header-count").textContent = `${count} / ${stations.length} ORTE`;
+        byId("map-count").textContent = `${count} / ${stations.length}`;
+        byId("progress-fill").style.width =
+          `${(count / stations.length) * 100}%`;
+        byId("completion").classList.toggle("show", count === stations.length);
+      }
+
+      function showStation(station) {
+        if (!isStationUnlocked(station)) {
+          showLockedStation(station);
+          return;
+        }
+        activeStation = station.id;
+        visited.add(station.id);
+        player.station = null;
+        player.target = null;
+        nearbyStation = station;
+        renderTopic(station);
+        byId("detail-icon").textContent = station.icon;
+        byId("detail-tag").textContent = "ENTDECKT · PERSONAL-CAMPUS";
+        byId("detail-title").textContent = station.title;
+        byId("detail-copy").textContent = station.copy;
+        byId("fact-list").replaceChildren(
+          ...station.facts.map((fact) => {
+            const item = document.createElement("li");
+            item.textContent = fact;
+            return item;
+          }),
+        );
+        byId("detail-tip").textContent = station.tip;
+        byId("detail-tip").classList.remove("show");
+        byId("map-location").textContent = station.short.toUpperCase();
+        byId("discover-button").classList.remove("show");
+        renderStationList();
+        updateProgress();
+      }
+
+      function updateNearby() {
+        const nearby =
+          stations.find(
+            (station) =>
+              Math.hypot(player.x - station.x, player.y - station.y) < 68,
+          ) || null;
+        nearbyStation = nearby;
+        const button = byId("discover-button");
+        button.classList.toggle("show", Boolean(nearby));
+        if (nearby)
+          button.textContent = isStationUnlocked(nearby)
+            ? `${visited.has(nearby.id) ? "Ansehen" : "Entdecken"}: ${nearby.short} ↗`
+            : `Gesperrt: ${nearby.short}`;
+        byId("map-location").textContent = activeStation
+          ? stations
+              .find((station) => station.id === activeStation)
+              .short.toUpperCase()
+          : "CAMPUS";
+      }
+
+      function travelTo(station) {
+        if (!isStationUnlocked(station)) {
+          showLockedStation(station);
+          return;
+        }
+        activeStation = station.id;
+        player.route = routeAlongRoads(player, station).slice(1);
+        player.route.push({ x: station.x, y: station.y });
+        player.station = station;
+        byId("discover-button").classList.remove("show");
+        renderStationList();
+      }
+
+      function moveTo(x, y) {
+        const destination = nearestRoadPoint(
+          clamp(x, 28, canvas.width - 28),
+          clamp(y, 40, canvas.height - 28),
+        );
+        player.route = routeAlongRoads(player, destination).slice(1);
+        player.station = null;
+        byId("discover-button").classList.remove("show");
+      }
+
+      function gameLoop(time) {
+        const delta = Math.min((time - lastFrame) / 1000 || 0, 0.05);
+        lastFrame = time;
+        if (player.route.length) {
+          const waypoint = player.route[0];
+          const dx = waypoint.x - player.x;
+          const dy = waypoint.y - player.y;
+          const distance = Math.hypot(dx, dy);
+          const step = 185 * delta;
+          player.facing = dx < 0 ? -1 : 1;
+          if (distance <= step + 1) {
+            player.x = waypoint.x;
+            player.y = waypoint.y;
+            player.route.shift();
+            if (!player.route.length) {
+              const destination = player.station;
+              player.station = null;
+              if (destination) showStation(destination);
+            }
+          } else {
+            player.x += (dx / distance) * step;
+            player.y += (dy / distance) * step;
+          }
+        }
+        updateNearby();
+        drawWorld(time);
+        requestAnimationFrame(gameLoop);
+      }
+
+      canvas.addEventListener("click", (event) => {
+        const bounds = canvas.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width) * canvas.width;
+        const y =
+          ((event.clientY - bounds.top) / bounds.height) * canvas.height;
+        const station = stations.find(
+          (place) => Math.hypot(x - place.x, y - place.y) < 62,
+        );
+        if (station) travelTo(station);
+        else moveTo(x, y);
+      });
+      canvas.addEventListener("pointermove", (event) => {
+        const bounds = canvas.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width) * canvas.width;
+        const y =
+          ((event.clientY - bounds.top) / bounds.height) * canvas.height;
+        const station = stations.find(
+          (place) => Math.hypot(x - place.x, y - place.y) < 62,
+        );
+        canvas.style.cursor = station ? "pointer" : "crosshair";
+        canvas.title = station
+          ? `${station.title}: ${station.copy} Hier lernst du: ${station.facts.join(" ")}`
+          : "Klicke auf einen Wegpunkt, um dort entlang der Wege hinzugehen.";
+      });
+      byId("discover-button").addEventListener("click", () => {
+        if (nearbyStation) showStation(nearbyStation);
+      });
+      byId("guide-button").addEventListener("click", () => {
+        const station = stations.find(
+          (item) => item.id === byId("guide-button").dataset.station,
+        );
+        if (!station) return;
+        const quote = byId("guide-quote");
+        const opening = !quote.classList.contains("show");
+        quote.classList.toggle("show", opening);
+        byId("guide-button").setAttribute("aria-expanded", String(opening));
+        byId("guide-button").textContent = opening
+          ? "Gespräch schließen"
+          : `Mit ${sceneDetails[station.id].host} sprechen`;
+      });
+      byId("insight-tabs").addEventListener("click", (event) => {
+        const tab = event.target.closest(".insight-tab");
+        if (!tab) return;
+        const station = stations.find(
+          (item) => item.id === byId("guide-button").dataset.station,
+        );
+        if (!station) return;
+        const index = Number(tab.dataset.index);
+        byId("insight-tabs")
+          .querySelectorAll(".insight-tab")
+          .forEach((item) =>
+            item.setAttribute("aria-selected", String(item === tab)),
+          );
+        byId("insight-copy").textContent =
+          sceneDetails[station.id].insights[index];
+      });
+      activeStation = stations[0].id;
+      renderTopic(stations[0]);
+      byId("detail-tag").textContent = "ERSTER HALT · PERSONAL-CAMPUS";
+      byId("detail-title").textContent = stations[0].title;
+      byId("detail-copy").textContent = stations[0].copy;
+      byId("fact-list").replaceChildren(
+        ...stations[0].facts.map((fact) => {
+          const item = document.createElement("li");
+          item.textContent = fact;
+          return item;
+        }),
+      );
+      byId("detail-tip").textContent = stations[0].tip;
+      byId("detail-icon").textContent = stations[0].icon;
+      renderStationList();
+      updateProgress();
+      requestAnimationFrame(gameLoop);
+    </script>
+  </body>
+</html>
